@@ -20,8 +20,8 @@ cd aigc
 # Install dependencies
 go mod download
 
-# Build the project
-go build -o aigc
+# Install AIGC
+go install .
 ```
 
 ## Configuration
