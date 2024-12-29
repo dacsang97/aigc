@@ -12,17 +12,13 @@ AIGC is a command-line tool that uses AI to automatically generate meaningful Gi
 
 ## Installation
 
+If you have Go installed, you can install AIGC by running:
+
 ```bash
-# Clone the repository
-git clone https://github.com/dacsang97/aigc.git
-cd aigc
-
-# Install dependencies
-go mod download
-
-# Install AIGC
-go install .
+go install github.com/dacsang97/aigc
 ```
+
+If you don't have Go installed, you can download the binary from [here](https://github.com/dacsang97/aigc/releases).
 
 ## Configuration
 
