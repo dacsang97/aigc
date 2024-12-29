@@ -26,7 +26,8 @@ go install .
 
 ## Configuration
 
-Before using AIGC, you need to configure your API key:
+Before using AIGC, you need to configure your API key.
+If you don't have one, you can get it from [here](https://openrouter.ai/settings/keys).
 
 ```bash
 # Set your API key
