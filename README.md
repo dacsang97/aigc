@@ -35,12 +35,27 @@ aigc config --model "your-preferred-model"
 # Enable debug mode
 aigc config --debug true
 
-# Set multiple options at once
-aigc config --apikey YOUR_API_KEY --model "your-preferred-model" --debug true
+# Add rules for better commit messages
+aigc config --rules "This is a monorepo with packages: api, web, docs","Always include scope for package changes","Include performance impact if relevant"
 
 # View current configuration
 aigc config
 ```
+
+### Project-Specific Rules
+
+You can create a `.aigcrules` file in your project directory to provide additional context and rules for commit message generation. These rules will be automatically loaded when running `aigc` commands.
+
+Example `.aigcrules`:
+
+```yaml
+- This is a monorepo project with packages: api, web, docs
+- Always use package name as scope when changes are package-specific
+- Include performance impact for any database-related changes
+- Reference Jira ticket number in footer if available
+```
+
+The rules can be any text that helps the AI understand your project's context and requirements better. They will be used alongside the global rules configured with `aigc config --rules`.
 
 ## Usage
 
