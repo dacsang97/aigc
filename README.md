@@ -34,7 +34,7 @@ AIGC supports multiple AI providers:
 aigc config --provider openai --api-key YOUR_API_KEY --model gpt-4
 
 # Anthropic
-aigc config --provider custom --api-key YOUR_API_KEY --model claude-3-opus-20240229 --endpoint https://api.anthropic.com/v1/messages
+aigc config --provider anthropic --api-key YOUR_API_KEY --model claude-3-5-sonnet-20241022
 
 # OpenRouter
 aigc config --provider openrouter --api-key YOUR_API_KEY --model google/gemini-flash-1.5-8b
