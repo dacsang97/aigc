@@ -47,15 +47,27 @@ aigc config
 ### Basic Commit
 
 ```bash
+# Let AI generate commit message automatically
 aigc commit
+
+# Provide your own commit message hint (in any language)
+aigc commit -m "Thêm tính năng đăng nhập qua Google"
+aigc commit --message "修复登录页面的样式问题"
+aigc commit -m "Add user authentication feature"
+
+# The AI will combine your message with the code changes
+# to generate a more accurate and contextual commit message
 ```
 
 ### Commit and Push
 
 ```bash
+# Generate and push
 aigc commit --push
-# or
 aigc commit -p
+
+# Generate with your message and push
+aigc commit -m "新增用户注册功能" --push
 ```
 
 ### Debug Mode
