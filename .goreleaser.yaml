@@ -31,6 +31,26 @@ archives:
       - goos: windows
         format: zip
 
+brews:
+  - name: aigc
+    tap:
+      owner: dacsang97
+      name: homebrew-tap
+      branch: main
+      token: "{{ .Env.GITHUB_TOKEN }}"
+    url_template: "https://github.com/dacsang97/aigc/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
+    commit_author:
+      name: goreleaserbot
+      email: bot@goreleaser.com
+    commit_msg_template: "Brew formula update for {{ .ProjectName }} version {{ .Tag }}"
+    homepage: "https://github.com/dacsang97/aigc"
+    description: "AI Git Commit CLI tool"
+    license: "MIT"
+    test: |
+      system "#{bin}/aigc --version"
+    install: |
+      bin.install "aigc"
+
 changelog:
   sort: asc
   filters:
