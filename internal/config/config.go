@@ -10,10 +10,14 @@ import (
 )
 
 type Config struct {
-	APIKey string `yaml:"api_key"`
-	Model  string `yaml:"model"`
-	Debug  bool   `yaml:"debug"`
-	Rules  string `yaml:"rules"`
+	Provider struct {
+		Provider string `yaml:"provider"` // "openai" or "openrouter" or "custom"
+		Model    string `yaml:"model"`    // The model to use
+		APIKey   string `yaml:"api_key"`  // The API key for the provider
+		Endpoint string `yaml:"endpoint"` // Custom API endpoint URL (optional)
+	} `yaml:"provider"`
+	Debug bool   `yaml:"debug"`
+	Rules string `yaml:"rules"`
 }
 
 type Manager struct {
@@ -50,7 +54,16 @@ func (m *Manager) Load() error {
 	if err != nil {
 		if os.IsNotExist(err) {
 			m.Config = Config{
-				Model: "google/gemini-flash-1.5-8b",
+				Provider: struct {
+					Provider string `yaml:"provider"`
+					Model    string `yaml:"model"`
+					APIKey   string `yaml:"api_key"`
+					Endpoint string `yaml:"endpoint"`
+				}{
+					Provider: "openrouter",
+					Model:    "google/gemini-flash-1.5-8b",
+					Endpoint: "",
+				},
 			}
 			return nil
 		}
