@@ -67,7 +67,7 @@ aigc commit --push
 aigc commit -p
 
 # Generate with your message and push
-aigc commit -m "新增用户注册功能" --push
+aigc commit -m "Cho phép user input message, AI sẽ dựa vào đó để generate commit" --push
 ```
 
 ### Debug Mode
