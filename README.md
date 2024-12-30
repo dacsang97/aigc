@@ -13,6 +13,12 @@ AIGC is a command-line tool that uses AI to automatically generate meaningful Gi
 
 ## Installation
 
+### Using Homebrew (macOS & Linux)
+
+```bash
+brew install dacsang97/homebrew-tap/aigc
+```
+
 If you have Go installed, you can install AIGC by running:
 
 ```bash
