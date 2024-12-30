@@ -45,8 +45,6 @@ func (g *Generator) Generate(changes, userMessage string, rules []string) (strin
 	systemContent := g.buildSystemMessage(rules)
 	messages := g.buildMessages(systemContent, changes, userMessage)
 
-	fmt.Println("System message:", systemContent)
-
 	reqBody := RequestBody{
 		Stream:   false,
 		Model:    g.model,
