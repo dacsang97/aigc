@@ -22,17 +22,23 @@ If you don't have Go installed, you can download the binary from [here](https://
 
 ## Configuration
 
-Before using AIGC, you need to configure your API key.
-If you don't have one, you can get it from [here](https://openrouter.ai/settings/keys).
+Before using AIGC, you need to configure your settings.
+If you need an API key, you can get it from [here](https://openrouter.ai/settings/keys).
 
 ```bash
 # Set your API key
-aigc config YOUR_API_KEY
-```
+aigc config --apikey YOUR_API_KEY
 
-You can view your current configuration by running:
+# Set AI model
+aigc config --model "your-preferred-model"
 
-```bash
+# Enable debug mode
+aigc config --debug true
+
+# Set multiple options at once
+aigc config --apikey YOUR_API_KEY --model "your-preferred-model" --debug true
+
+# View current configuration
 aigc config
 ```
 

@@ -172,17 +172,46 @@ func main() {
 			{
 				Name:  "config",
 				Usage: "Configure aicm settings",
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:  "apikey",
+						Usage: "Set API key",
+					},
+					&cli.StringFlag{
+						Name:  "model",
+						Usage: "Set AI model",
+					},
+					&cli.BoolFlag{
+						Name:  "debug",
+						Usage: "Set debug mode",
+					},
+				},
 				Action: func(c *cli.Context) error {
-					if c.Args().Len() > 0 {
-						config.APIKey = c.Args().First()
+					// Handle API key update
+					if apiKey := c.String("apikey"); apiKey != "" {
+						config.APIKey = apiKey
+					}
+
+					// Handle model update
+					if model := c.String("model"); model != "" {
+						config.Model = model
+					}
+
+					// Handle debug update
+					if c.IsSet("debug") {
+						config.Debug = c.Bool("debug")
+					}
+
+					// Save if any changes were made
+					if c.NumFlags() > 0 {
 						if err := saveConfig(); err != nil {
 							return fmt.Errorf("error saving config: %v", err)
 						}
-						fmt.Println("API key saved successfully")
+						fmt.Println("Configuration updated successfully")
 						return nil
 					}
 
-					// Show current config
+					// Show current config if no flags provided
 					fmt.Printf("Current configuration:\n")
 					fmt.Printf("API Key: %s\n", config.APIKey)
 					fmt.Printf("Model: %s\n", config.Model)
