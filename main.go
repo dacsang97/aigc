@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/samber/lo"
 	"github.com/urfave/cli/v2"
 	"go.uber.org/zap"
 
@@ -48,10 +49,9 @@ func main() {
 	}
 
 	// Convert commands to cli.Commands
-	cliCommands := make([]*cli.Command, len(commands))
-	for i, command := range commands {
-		cliCommands[i] = cmd.ToCLICommand(command)
-	}
+	cliCommands := lo.Map(commands, func(c cmd.Command, _ int) *cli.Command {
+		return cmd.ToCLICommand(c)
+	})
 
 	app := &cli.App{
 		Name:    "aigc",
