@@ -5,7 +5,7 @@ AIGC is a command-line tool that uses AI to automatically generate meaningful Gi
 ## Features
 
 - 🤖 AI-powered commit message generation
-- 🔑 Support for multiple AI providers (OpenAI, OpenRouter, Groq, and custom providers)
+- 🔑 Support for multiple AI providers (OpenAI, Anthropic, OpenRouter, Groq, and custom providers)
 - 🎯 Configurable models and API endpoints
 - 📝 Detailed logging system
 - 🔄 Optional automatic push after commit
@@ -33,6 +33,9 @@ AIGC supports multiple AI providers:
 # OpenAI
 aigc config --provider openai --api-key YOUR_API_KEY --model gpt-4
 
+# Anthropic
+aigc config --provider custom --api-key YOUR_API_KEY --model claude-3-opus-20240229 --endpoint https://api.anthropic.com/v1/messages
+
 # OpenRouter
 aigc config --provider openrouter --api-key YOUR_API_KEY --model google/gemini-flash-1.5-8b
 
@@ -46,6 +49,7 @@ aigc config --provider custom --api-key YOUR_API_KEY --model your-model --endpoi
 You can get API keys from:
 
 - OpenAI: https://platform.openai.com/api-keys
+- Anthropic: https://console.anthropic.com/settings/keys
 - OpenRouter: https://openrouter.ai/keys
 - Groq: https://console.groq.com/keys
 

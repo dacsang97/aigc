@@ -9,7 +9,7 @@ type Provider interface {
 
 // Config represents the configuration for an AI provider
 type Config struct {
-	Provider string `yaml:"provider"` // "openai" or "openrouter" or "custom"
+	Provider string `yaml:"provider"` // "openai", "anthropic", "openrouter", or "custom"
 	Model    string `yaml:"model"`    // The model to use
 	APIKey   string `yaml:"api_key"`  // The API key for the provider
 	Endpoint string `yaml:"endpoint"` // Custom API endpoint URL (optional)
@@ -25,6 +25,9 @@ var (
 	SupportedProviders = map[string]ProviderConfig{
 		"openai": {
 			BaseURL: "https://api.openai.com/v1/chat/completions",
+		},
+		"anthropic": {
+			BaseURL: "https://api.anthropic.com/v1/messages",
 		},
 		"openrouter": {
 			BaseURL: "https://openrouter.ai/api/v1/chat/completions",
@@ -54,6 +57,8 @@ func NewProvider(config Config) (Provider, error) {
 	switch config.Provider {
 	case "openai":
 		return NewOpenAIProvider(config)
+	case "anthropic":
+		return NewAnthropicProvider(config)
 	case "openrouter":
 		return NewOpenRouterProvider(config)
 	default:
