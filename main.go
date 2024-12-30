@@ -229,6 +229,11 @@ func main() {
 						Usage:       "push changes after commit",
 						Destination: &push,
 					},
+					&cli.StringFlag{
+						Name:    "message",
+						Aliases: []string{"m"},
+						Usage:   "provide commit message hint (in any language)",
+					},
 				},
 				Action: runCommit,
 			},
