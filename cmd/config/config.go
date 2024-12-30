@@ -25,73 +25,93 @@ func New(configManager *config.Manager, logger *logger.Logger) cmd.Command {
 
 	baseCmd := cmd.NewBaseCommand(
 		"config",
-		"Configure aicm settings",
+		"Configure the application settings",
 		[]cli.Flag{
 			&cli.StringFlag{
-				Name:  "apikey",
-				Usage: "Set API key",
+				Name:  "provider",
+				Usage: "Set the AI provider (openai, openrouter, or custom)",
 			},
 			&cli.StringFlag{
 				Name:  "model",
-				Usage: "Set AI model",
+				Usage: "Set the AI model",
+			},
+			&cli.StringFlag{
+				Name:  "api-key",
+				Usage: "Set the API key",
+			},
+			&cli.StringFlag{
+				Name:  "endpoint",
+				Usage: "Set custom API endpoint URL (optional)",
 			},
 			&cli.BoolFlag{
 				Name:  "debug",
-				Usage: "Set debug mode",
-			},
-			&cli.StringFlag{
-				Name:  "rules",
-				Usage: "Set commit message generation rules (one rule per line)",
+				Usage: "Enable debug mode",
 			},
 		},
-		c.handle,
+		c.runConfig,
 	)
 
 	c.BaseCommand = baseCmd
 	return c
 }
 
-func (c *Command) handle(ctx *cli.Context) error {
-	// Handle API key update
-	if apiKey := ctx.String("apikey"); apiKey != "" {
-		c.configManager.Config.APIKey = apiKey
+func (c *Command) runConfig(ctx *cli.Context) error {
+	if err := c.configManager.Load(); err != nil {
+		return err
 	}
 
-	// Handle model update
+	updated := false
+
+	if provider := ctx.String("provider"); provider != "" {
+		provider = strings.ToLower(provider)
+		if provider != "openai" && provider != "openrouter" {
+			return fmt.Errorf("invalid provider: %s. Must be 'openai' or 'openrouter'", provider)
+		}
+		c.configManager.Config.Provider.Provider = provider
+		updated = true
+	}
+
 	if model := ctx.String("model"); model != "" {
-		c.configManager.Config.Model = model
+		c.configManager.Config.Provider.Model = model
+		updated = true
 	}
 
-	// Handle debug update
+	if apiKey := ctx.String("api-key"); apiKey != "" {
+		c.configManager.Config.Provider.APIKey = apiKey
+		updated = true
+	}
+
+	if endpoint := ctx.String("endpoint"); endpoint != "" {
+		c.configManager.Config.Provider.Endpoint = endpoint
+		updated = true
+	}
+
 	if ctx.IsSet("debug") {
 		c.configManager.Config.Debug = ctx.Bool("debug")
+		updated = true
 	}
 
-	// Handle rules update
-	if rules := ctx.String("rules"); rules != "" {
-		c.configManager.Config.Rules = rules
-	}
-
-	// Save if any changes were made
-	if ctx.NumFlags() > 0 {
-		if err := c.configManager.Save(); err != nil {
-			return fmt.Errorf("error saving config: %v", err)
-		}
-		fmt.Println("Configuration updated successfully")
+	if !updated {
+		fmt.Printf("Current configuration:\n")
+		fmt.Printf("  Provider: %s\n", c.configManager.Config.Provider.Provider)
+		fmt.Printf("  Model: %s\n", c.configManager.Config.Provider.Model)
+		fmt.Printf("  API Key: %s\n", maskAPIKey(c.configManager.Config.Provider.APIKey))
+		fmt.Printf("  Endpoint: %s\n", c.configManager.Config.Provider.Endpoint)
+		fmt.Printf("  Debug: %v\n", c.configManager.Config.Debug)
 		return nil
 	}
 
-	// Show current config if no flags provided
-	fmt.Printf("Current configuration:\n")
-	fmt.Printf("API Key: %s\n", c.configManager.Config.APIKey)
-	fmt.Printf("Model: %s\n", c.configManager.Config.Model)
-	fmt.Printf("Debug: %v\n", c.configManager.Config.Debug)
-	rules := c.configManager.GetRules()
-	if len(rules) > 0 {
-		fmt.Printf("\nCommit message rules:\n")
-		for _, rule := range rules {
-			fmt.Printf("  - %s\n", strings.TrimSpace(rule))
-		}
+	if err := c.configManager.Save(); err != nil {
+		return err
 	}
+
+	c.logger.Info("Configuration updated successfully")
 	return nil
+}
+
+func maskAPIKey(key string) string {
+	if len(key) <= 8 {
+		return "********"
+	}
+	return key[:4] + "..." + key[len(key)-4:]
 }

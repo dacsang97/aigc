@@ -72,7 +72,15 @@ func (c *Command) handle(ctx *cli.Context) error {
 	}
 
 	// Initialize commit message generator
-	generator := commit.New(c.configManager.Config.APIKey, c.configManager.Config.Model)
+	generator, err := commit.New(commit.ProviderConfig{
+		Provider: c.configManager.Config.Provider.Provider,
+		Model:    c.configManager.Config.Provider.Model,
+		APIKey:   c.configManager.Config.Provider.APIKey,
+		Endpoint: c.configManager.Config.Provider.Endpoint,
+	})
+	if err != nil {
+		return fmt.Errorf("failed to initialize commit message generator: %v", err)
+	}
 
 	// Generate commit message
 	commitMsg, err := generator.Generate(changes, userMessage, c.configManager.GetRules())
